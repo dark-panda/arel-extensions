@@ -1,0 +1,65 @@
+
+# Based on general Arel styles...
+Style/PercentLiteralDelimiters:
+  Description: 'Use `%`-literal delimiters consistently'
+  StyleGuide: '#percent-literal-braces'
+  Enabled: true
+  PreferredDelimiters:
+    '%':  '()'
+    '%i': '()'
+    '%q': '()'
+    '%Q': '()'
+    '%r': '()'
+    '%s': '()'
+    '%w': '()'
+    '%W': '()'
+    '%x': '()'
+
+Metrics/LineLength:
+  Max: 200
+  Description: 'Limit lines to 200 characters.'
+  StyleGuide: '#80-character-limits'
+  Enabled: true
+
+Layout/CaseIndentation:
+  Description: 'Indentation of when in a case/when/[else/]end.'
+  StyleGuide: '#indent-when-to-case'
+  Enabled: true
+  EnforcedStyle: end
+  IndentOneStep: true
+
+# For visit_* methods...
+Naming/MethodName:
+  Description: 'Use the configured style when naming methods.'
+  StyleGuide: '#snake-case-symbols-methods-vars'
+  Enabled: false
+
+Style/MethodDefParentheses:
+  Description: >-
+                 Checks if the method definitions have or don't have
+                 parentheses.
+  StyleGuide: '#method-parens'
+  Enabled: false
+
+Style/Documentation:
+  Description: 'Document classes and non-namespace modules.'
+  Enabled: false
+  Exclude:
+    - 'spec/**/*'
+    - 'test/**/*'
+
+Style/Alias:
+  Description: 'Use alias instead of alias_method.'
+  StyleGuide: '#alias-method'
+  Enabled: false
+
+Layout/IndentationConsistency:
+  Description: 'Keep indentation straight.'
+  StyleGuide: '#spaces-indentation'
+  Enabled: true
+  EnforcedStyle: indented_internal_methods
+
+Layout/EndAlignment:
+  Description: 'Align ends correctly.'
+  Enabled: true
+  EnforcedStyleAlignWith: variable

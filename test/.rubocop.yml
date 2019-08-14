@@ -1,0 +1,11 @@
+
+inherit_from:
+  - ../.rubocop.yml
+
+Metrics/BlockLength:
+  Description: 'Avoid long blocks with many lines.'
+  Enabled: false
+
+Metrics/ModuleLength:
+  Description: 'Avoid modules longer than 300 lines of code.'
+  Enabled: false
