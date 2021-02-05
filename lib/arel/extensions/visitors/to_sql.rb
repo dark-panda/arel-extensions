@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'arel/visitors/postgresql'
+
 module Arel
   module Extensions
     module Visitors

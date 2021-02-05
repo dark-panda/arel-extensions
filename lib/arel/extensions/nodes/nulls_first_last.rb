@@ -36,7 +36,9 @@ module Arel
 
   [
     Attributes::Attribute,
+    Nodes::Ascending,
     Nodes::Case,
+    Nodes::Descending,
     Nodes::Function,
     Nodes::InfixOperation,
     Nodes::Ordering,
