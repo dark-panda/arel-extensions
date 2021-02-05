@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require "active_support/core_ext/enumerable"
+
+require "date"
 module FakeRecord
   class Column < Struct.new(:name, :type)
   end
@@ -9,83 +12,78 @@ module FakeRecord
     attr_accessor :visitor
 
     def initialize(visitor = nil)
-      @tables = %w(users photos developers products)
+      @tables = %w{ users photos developers products}
       @columns = {
-        'users' => [
-          Column.new('id', :integer),
-          Column.new('name', :string),
-          Column.new('bool', :boolean),
-          Column.new('created_at', :date)
+        "users" => [
+          Column.new("id", :integer),
+          Column.new("name", :string),
+          Column.new("bool", :boolean),
+          Column.new("created_at", :date)
         ],
-        'products' => [
-          Column.new('id', :integer),
-          Column.new('price', :decimal)
+        "products" => [
+          Column.new("id", :integer),
+          Column.new("price", :decimal)
         ]
       }
       @columns_hash = {
-        'users' => Hash[@columns['users'].map { |x| [x.name, x] }],
-        'products' => Hash[@columns['products'].map { |x| [x.name, x] }]
+        "users" => @columns["users"].index_by(&:name),
+        "products" => @columns["products"].index_by(&:name)
       }
       @primary_keys = {
-        'users' => 'id',
-        'products' => 'id'
+        "users" => "id",
+        "products" => "id"
       }
       @visitor = visitor
     end
 
-    def columns_hash table_name
+    def columns_hash(table_name)
       @columns_hash[table_name]
     end
 
-    def primary_key name
+    def primary_key(name)
       @primary_keys[name.to_s]
     end
 
-    def data_source_exists? name
+    def data_source_exists?(name)
       @tables.include? name.to_s
     end
 
-    def columns name, message = nil
+    def columns(name, message = nil)
       @columns[name.to_s]
     end
 
-    def quote_table_name name
+    def quote_table_name(name)
       "\"#{name}\""
     end
 
-    def quote_column_name name
+    def quote_column_name(name)
       "\"#{name}\""
+    end
+
+    def sanitize_as_sql_comment(comment)
+      comment
     end
 
     def schema_cache
       self
     end
 
-    def quote thing, column = nil
-      if column && !thing.nil?
-        case column.type
-          when :integer
-            thing = thing.to_i
-          when :string
-            thing = thing.to_s
-        end
-      end
-
+    def quote(thing)
       case thing
-        when DateTime
-          "'#{thing.strftime('%Y-%m-%d %H:%M:%S')}'"
-        when Date
-          "'#{thing.strftime('%Y-%m-%d')}'"
-        when true
-          "'t'"
-        when false
-          "'f'"
-        when nil
-          'NULL'
-        when Numeric
-          thing
-        else
-          "'#{thing.to_s.gsub("'", "\\\\'")}'"
+      when DateTime
+        "'#{thing.strftime("%Y-%m-%d %H:%M:%S")}'"
+      when Date
+        "'#{thing.strftime("%Y-%m-%d")}'"
+      when true
+        "'t'"
+      when false
+        "'f'"
+      when nil
+        "NULL"
+      when Numeric
+        thing
+      else
+        "'#{thing.to_s.gsub("'", "\\\\'")}'"
       end
     end
   end
@@ -97,7 +95,7 @@ module FakeRecord
     attr_reader :spec, :connection
 
     def initialize
-      @spec = Spec.new(adapter: 'america')
+      @spec = Spec.new(adapter: "america")
       @connection = Connection.new
       @connection.visitor = Arel::Visitors::ToSql.new(connection)
     end
@@ -106,7 +104,7 @@ module FakeRecord
       yield connection
     end
 
-    def table_exists? name
+    def table_exists?(name)
       connection.tables.include? name.to_s
     end
 
@@ -118,8 +116,8 @@ module FakeRecord
       connection
     end
 
-    def quote thing, column = nil
-      connection.quote thing, column
+    def quote(thing)
+      connection.quote thing
     end
   end
 
