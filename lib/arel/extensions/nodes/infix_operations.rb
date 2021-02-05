@@ -9,12 +9,6 @@ module Arel
         end
       end
 
-      class Modulo < Arel::Nodes::InfixOperation
-        def initialize left, right
-          super(:%, left, right)
-        end
-      end
-
       class Match < Arel::Nodes::InfixOperation
         def initialize left, right
           super(:'@@', left, right)
@@ -30,15 +24,9 @@ module Arel
   end
 
   module Predications
-    def modulo other
-      Extensions::Nodes::Modulo.new self, other
-    end
-
     def exponentiation other
       Extensions::Nodes::Exponentiation.new self, other
     end
-    alias :pow :exponentiation
-    alias :power_of :exponentiation
 
     def tsearch other
       Extensions::Nodes::Match.new self, other

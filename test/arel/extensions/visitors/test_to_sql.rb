@@ -25,74 +25,183 @@ module Arel
           expect(compile(sql)).must_equal %("products"."price" ^ 10)
         end
 
-        it 'should handle pow' do
-          sql = @node.pow 10
-          expect(compile(sql)).must_equal %("products"."price" ^ 10)
-        end
-
-        it 'should handle power_of' do
-          sql = @node.power_of 10
-          expect(compile(sql)).must_equal %("products"."price" ^ 10)
-        end
-
-        it 'should handle modulo' do
-          sql = @node.modulo 10
-          expect(compile(sql)).must_equal %("products"."price" % 10)
-        end
-
         it 'should handle cast' do
           sql = @node.cast('geometry')
           expect(compile(sql)).must_equal %{CAST("products"."price" AS geometry)}
         end
 
-        it 'should handle square_root' do
-          sql = @node.square_root
-          expect(compile(sql)).must_equal %( |/ "products"."price")
-        end
-
-        it 'should handle sqrt' do
-          sql = @node.sqrt
-          expect(compile(sql)).must_equal %( |/ "products"."price")
-        end
-
-        it 'should handle cube_root' do
-          sql = @node.cube_root
-          expect(compile(sql)).must_equal %( ||/ "products"."price")
-        end
-
-        it 'should handle cbrt' do
-          sql = @node.cbrt
-          expect(compile(sql)).must_equal %( ||/ "products"."price")
-        end
-
-        it 'should handle factorial' do
-          sql = @node.factorial
-          expect(compile(sql)).must_equal %("products"."price" !)
-        end
-
-        it 'should handle fact' do
-          sql = @node.fact
-          expect(compile(sql)).must_equal %("products"."price" !)
-        end
-
-        it 'should handle factorial prefix' do
-          sql = @node.factorial_prefix
-          expect(compile(sql)).must_equal %( !! "products"."price")
-        end
-
-        it 'should handle fact prefix' do
-          sql = @node.fact_prefix
-          expect(compile(sql)).must_equal %( !! "products"."price")
-        end
-
         it 'should handle absolute' do
           sql = @node.absolute
-          expect(compile(sql)).must_equal %( @ "products"."price")
+          expect(compile(sql)).must_equal %(ABS("products"."price"))
         end
 
         it 'should handle abs' do
           sql = @node.abs
-          expect(compile(sql)).must_equal %( @ "products"."price")
+          expect(compile(sql)).must_equal %(ABS("products"."price"))
+        end
+
+        it 'should handle cbrt' do
+          expect(compile(@node.cbrt)).must_equal %(CBRT("products"."price"))
+        end
+
+        it 'should handle cube_root' do
+          expect(compile(@node.cube_root)).must_equal %(CBRT("products"."price"))
+        end
+
+        it 'should handle ceil' do
+          expect(compile(@node.ceil)).must_equal %(CEIL("products"."price"))
+        end
+
+        it 'should handle degrees' do
+          expect(compile(@node.degrees)).must_equal %(DEGREES("products"."price"))
+        end
+
+        it 'should handle div' do
+          expect(compile(@node.div(10))).must_equal %(DIV("products"."price", 10))
+        end
+
+        it 'should handle exp' do
+          expect(compile(@node.exp)).must_equal %(EXP("products"."price"))
+        end
+
+        it 'should handle factorial' do
+          expect(compile(@node.factorial)).must_equal %(FACTORIAL("products"."price"))
+        end
+
+        it 'should handle floor' do
+          expect(compile(@node.floor)).must_equal %(FLOOR("products"."price"))
+        end
+
+        it 'should handle ln' do
+          expect(compile(@node.ln)).must_equal %(LN("products"."price"))
+        end
+
+        it 'should handle log' do
+          expect(compile(@node.log)).must_equal %(LOG("products"."price"))
+        end
+
+        it 'should handle log10' do
+          expect(compile(@node.log10)).must_equal %(LOG10("products"."price"))
+        end
+
+        it 'should handle log_10' do
+          expect(compile(@node.log_10)).must_equal %(LOG10("products"."price"))
+        end
+
+        it 'should handle mod' do
+          expect(compile(@node.mod(10))).must_equal %(MOD("products"."price", 10))
+        end
+
+        it 'should handle modulo' do
+          expect(compile(@node.modulo(10))).must_equal %(MOD("products"."price", 10))
+        end
+
+        it 'should handle power' do
+          expect(compile(@node.power(10))).must_equal %(POWER("products"."price", 10))
+        end
+
+        it 'should handle pow' do
+          expect(compile(@node.pow(10))).must_equal %(POWER("products"."price", 10))
+        end
+
+        it 'should handle power_of' do
+          expect(compile(@node.power_of(10))).must_equal %(POWER("products"."price", 10))
+        end
+
+        it 'should handle radians' do
+          expect(compile(@node.radians)).must_equal %(RADIANS("products"."price"))
+        end
+
+        it 'should handle round' do
+          expect(compile(@node.round)).must_equal %(ROUND("products"."price"))
+        end
+
+        it 'should handle round with an argument' do
+          expect(compile(@node.round(3))).must_equal %(ROUND("products"."price", 3))
+        end
+
+        it 'should handle scale' do
+          expect(compile(@node.scale)).must_equal %(SCALE("products"."price"))
+        end
+
+        it 'should handle sign' do
+          expect(compile(@node.sign)).must_equal %(SIGN("products"."price"))
+        end
+
+        it 'should handle sqrt' do
+          expect(compile(@node.sqrt)).must_equal %(SQRT("products"."price"))
+        end
+
+        it 'should handle square_root' do
+          expect(compile(@node.square_root)).must_equal %(SQRT("products"."price"))
+        end
+
+        it 'should handle trunc' do
+          expect(compile(@node.trunc(10))).must_equal %(TRUNC("products"."price", 10))
+        end
+
+        it 'should handle widthbucket' do
+          expect(compile(@node.widthbucket(10, 20, 30))).must_equal %(WIDTHBUCKET("products"."price", 10, 20, 30))
+        end
+
+        it 'should handle width_bucket' do
+          expect(compile(@node.width_bucket(10, 20, 30))).must_equal %(WIDTHBUCKET("products"."price", 10, 20, 30))
+        end
+
+        it 'should handle acos' do
+          expect(compile(@node.acos)).must_equal %(ACOS("products"."price"))
+        end
+
+        it 'should handle asin' do
+          expect(compile(@node.asin)).must_equal %(ASIN("products"."price"))
+        end
+
+        it 'should handle atan' do
+          expect(compile(@node.atan)).must_equal %(ATAN("products"."price"))
+        end
+
+        it 'should handle atan2' do
+          expect(compile(@node.atan2 )).must_equal %(ATAN2("products"."price"))
+        end
+
+        it 'should handle cos' do
+          expect(compile(@node.cos)).must_equal %(COS("products"."price"))
+        end
+
+        it 'should handle cot' do
+          expect(compile(@node.cot)).must_equal %(COT("products"."price"))
+        end
+
+        it 'should handle sin' do
+          expect(compile(@node.sin)).must_equal %(SIN("products"."price"))
+        end
+
+        it 'should handle tan' do
+          expect(compile(@node.tan)).must_equal %(TAN("products"."price"))
+        end
+
+        it 'should handle sinh' do
+          expect(compile(@node.sinh)).must_equal %(SINH("products"."price"))
+        end
+
+        it 'should handle cosh' do
+          expect(compile(@node.cosh)).must_equal %(COSH("products"."price"))
+        end
+
+        it 'should handle tanh' do
+          expect(compile(@node.tanh)).must_equal %(TANH("products"."price"))
+        end
+
+        it 'should handle asinh' do
+          expect(compile(@node.asinh)).must_equal %(ASINH("products"."price"))
+        end
+
+        it 'should handle acosh' do
+          expect(compile(@node.acosh)).must_equal %(ACOSH("products"."price"))
+        end
+
+        it 'should handle atanh' do
+          expect(compile(@node.atanh)).must_equal %(ATANH("products"."price"))
         end
 
         it 'should handle tsearch' do

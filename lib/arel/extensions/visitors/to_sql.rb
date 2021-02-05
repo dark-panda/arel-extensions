@@ -14,10 +14,6 @@ module Arel
             visit(o.type, collector) << ')'
           end
 
-          def visit_Arel_Extensions_Nodes_Factorial o, collector
-            visit(o.expr, collector) << ' !'
-          end
-
           def visit_Arel_Extensions_Nodes_Exists o, collector
             collector = visit o.left, collector
             collector << ' @? '
@@ -54,92 +50,56 @@ module Arel
             collector << ' NULLS LAST'
           end
 
+          %w{
+            Abs
+            Cbrt
+            Ceil
+            Degrees
+            Div
+            Exp
+            Factorial
+            Floor
+            Ln
+            Log
+            Log10
+            Mod
+            Power
+            Radians
+            Round
+            Scale
+            Sign
+            Sqrt
+            Trunc
+            WidthBucket
 
+            Acos
+            Asin
+            Atan
+            Atan2
+            Cos
+            Cot
+            Sin
+            Tan
 
-
-
-          def visit_Arel_Extensions_Nodes_Abs o, collector
-            "ABS(#{o.expressions.map { |x|
-              visit x }.join(', ')})#{o.alias ? " AS #{visit o.alias}" : ''}"
-          end
-
-          def visit_Arel_Extensions_Nodes_Cbrt o
-            "CBRT(#{o.expressions.map { |x|
-              visit x }.join(', ')})#{o.alias ? " AS #{visit o.alias}" : ''}"
-          end
-
-          def visit_Arel_Extensions_Nodes_Ceil o
-            "CEIL(#{o.expressions.map { |x|
-              visit x }.join(', ')})#{o.alias ? " AS #{visit o.alias}" : ''}"
-          end
-
-          def visit_Arel_Extensions_Nodes_Degrees o
-            "DEGREES(#{o.expressions.map { |x|
-              visit x }.join(', ')})#{o.alias ? " AS #{visit o.alias}" : ''}"
-          end
-
-          def visit_Arel_Extensions_Nodes_Div o
-          end
-
-          def visit_Arel_Extensions_Nodes_Exp o
-            "EXP(#{o.expressions.map { |x|
-              visit x }.join(', ')})#{o.alias ? " AS #{visit o.alias}" : ''}"
-          end
-
-          def visit_Arel_Extensions_Nodes_Floor o
-            "FLOOR(#{o.expressions.map { |x|
-              visit x }.join(', ')})#{o.alias ? " AS #{visit o.alias}" : ''}"
-          end
-
-          def visit_Arel_Extensions_Nodes_Ln o
-            "LN(#{o.expressions.map { |x|
-              visit x }.join(', ')})#{o.alias ? " AS #{visit o.alias}" : ''}"
-          end
-
-          def visit_Arel_Extensions_Nodes_Log o
-          end
-
-          def visit_Arel_Extensions_Nodes_Mod o
-          end
-
-          def visit_Arel_Extensions_Nodes_Pi o
-            "PI()#{o.alias ? " AS #{visit o.alias}" : ''}"
-          end
-
-          def visit_Arel_Extensions_Nodes_Power o
-          end
-
-          def visit_Arel_Extensions_Nodes_Radians o
-            "LN(#{o.expressions.map { |x|
-              visit x }.join(', ')})#{o.alias ? " AS #{visit o.alias}" : ''}"
-          end
-
-          def visit_Arel_Extensions_Nodes_Random o
-            "RANDOM()#{o.alias ? " AS #{visit o.alias}" : ''}"
-          end
-
-          def visit_Arel_Extensions_Nodes_Round o
-          end
-
-          def visit_Arel_Extensions_Nodes_Setseed o
-            "SETSEED(#{o.expressions.map { |x|
-              visit x }.join(', ')})#{o.alias ? " AS #{visit o.alias}" : ''}"
-          end
-
-          def visit_Arel_Extensions_Nodes_Sign o
-            "SIGN(#{o.expressions.map { |x|
-              visit x }.join(', ')})#{o.alias ? " AS #{visit o.alias}" : ''}"
-          end
-
-          def visit_Arel_Extensions_Nodes_Sqrt o
-            "SQRT(#{o.expressions.map { |x|
-              visit x }.join(', ')})#{o.alias ? " AS #{visit o.alias}" : ''}"
-          end
-
-          def visit_Arel_Extensions_Nodes_Trunc o
-          end
-
-          def visit_Arel_Extensions_Nodes_WidthBucket o
+            Sinh
+            Cosh
+            Tanh
+            Asinh
+            Acosh
+            Atanh
+          }.each do |function|
+            class_eval(<<~RUBY, __FILE__, __LINE__ + 1)
+              def visit_Arel_Extensions_Nodes_#{function} o, collector
+                collector << '#{function.upcase}('
+                collector = visit(o.expressions, collector) << ')'
+                if o.alias
+                  collector << ' AS '
+                  visit o.alias, collector
+                else
+                  collector
+                end
+              end
+            RUBY
           end
       end
     end
