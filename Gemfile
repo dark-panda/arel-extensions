@@ -8,8 +8,8 @@ gem 'guard'
 gem 'guard-minitest'
 gem 'minitest'
 gem 'minitest-reporters'
-gem 'rake', '~> 10.0'
-gem 'rdoc', '~> 3.12'
+gem 'rake'
+gem 'rdoc'
 gem 'simplecov'
 
 if File.exist?('Gemfile.local')
