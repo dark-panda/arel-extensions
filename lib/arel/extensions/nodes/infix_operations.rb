@@ -15,9 +15,15 @@ module Arel
         end
       end
 
-      class Tsearch < Arel::Nodes::InfixOperation
+      class Match < Arel::Nodes::InfixOperation
         def initialize left, right
           super(:'@@', left, right)
+        end
+      end
+
+      class Exists < Arel::Nodes::InfixOperation
+        def initialize left, right
+          super(:'@?', left, right)
         end
       end
     end
@@ -35,7 +41,15 @@ module Arel
     alias :power_of :exponentiation
 
     def tsearch other
-      Extensions::Nodes::Tsearch.new self, other
+      Extensions::Nodes::Match.new self, other
+    end
+
+    def json_path_exists other
+      Extensions::Nodes::Exists.new self, other
+    end
+
+    def json_path_match other
+      Extensions::Nodes::Match.new self, other
     end
   end
 end

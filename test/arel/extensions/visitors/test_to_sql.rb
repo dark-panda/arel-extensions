@@ -106,6 +106,22 @@ module Arel
           expect(compile(sql)).must_equal %("users"."tsearch" @@ plainto_tsquery('foo bar'))
         end
 
+        it 'should handle JSON path exists' do
+          sql = @table[:data].json_path_exists('$.foo.bar')
+          expect(compile(sql)).must_equal %("users"."data" @? '$.foo.bar')
+
+          sql = @table[:data].json_path_exists(Nodes.build_quoted('$.foo.bar'))
+          expect(compile(sql)).must_equal %("users"."data" @? '$.foo.bar')
+        end
+
+        it 'should handle JSON path match' do
+          sql = @table[:data].json_path_match('$.foo.bar')
+          expect(compile(sql)).must_equal %("users"."data" @@ '$.foo.bar')
+
+          sql = @table[:data].json_path_match(Nodes.build_quoted('$.foo.bar'))
+          expect(compile(sql)).must_equal %("users"."data" @@ '$.foo.bar')
+        end
+
         it 'should handle nulls_first' do
           sql = @table[:foos].nulls_first
           expect(compile(sql)).must_equal %("users"."foos" NULLS FIRST)

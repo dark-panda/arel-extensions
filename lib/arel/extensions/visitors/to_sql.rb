@@ -16,7 +16,20 @@ module Arel
             visit(o.expr, collector) << ' !'
           end
 
-          def visit_Arel_Extensions_Nodes_Tsearch o, collector
+          def visit_Arel_Extensions_Nodes_Exists o, collector
+            collector = visit o.left, collector
+            collector << ' @? '
+
+            right = if o.right.is_a?(String)
+              ::Arel::Nodes.build_quoted(o.right)
+            else
+              o.right
+            end
+
+            visit right, collector
+          end
+
+          def visit_Arel_Extensions_Nodes_Match o, collector
             collector = visit o.left, collector
             collector << ' @@ '
 
