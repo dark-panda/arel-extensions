@@ -7,4 +7,3 @@ end
 
 require 'arel/extensions/nodes'
 require 'arel/extensions/visitors/to_sql'
-require 'arel/extensions/builder'
