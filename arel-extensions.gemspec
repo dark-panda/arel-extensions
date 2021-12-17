@@ -22,5 +22,5 @@ Gem::Specification.new do |s|
   s.homepage = "https://github.com/dark-panda/arel-extensions"
   s.require_paths = ["lib"]
 
-  s.add_dependency("activerecord", ["~> 6.0"])
+  s.add_dependency("activerecord", [">= 6.0"])
 end
